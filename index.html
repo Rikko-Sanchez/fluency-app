@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Fluency App</title>
+  <style>
+    body {
+      font-family: Arial;
+      max-width: 600px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    #chat {
+      border: 1px solid #ccc;
+      padding: 10px;
+      height: 400px;
+      overflow-y: auto;
+      margin-bottom: 10px;
+    }
+
+    .message {
+      margin: 5px 0;
+      padding: 8px;
+      border-radius: 10px;
+      max-width: 70%;
+    }
+
+    .user {
+      background-color: #d1e7dd;
+      margin-left: auto;
+      text-align: right;
+    }
+
+    .ai {
+      background-color: #f8d7da;
+      margin-right: auto;
+    }
+
+    #inputArea {
+      display: flex;
+      gap: 5px;
+    }
+
+    input {
+      flex: 1;
+      padding: 8px;
+    }
+
+    button {
+      padding: 8px;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>💬 Fluency Chat</h2>
+
+  <div id="chat"></div>
+
+  <div id="inputArea">
+    <input id="textInput" placeholder="Type your message..." />
+    <button onclick="sendMessage()">Send</button>
+  </div>
+
+  <script>
+    const chat = document.getElementById("chat");
+
+    function addMessage(text, sender, correction = null) {
+      const msg = document.createElement("div");
+      msg.classList.add("message", sender);
+      msg.textContent = text;
+      if (correction) {
+        const correctionEl = document.createElement("div");
+        correctionEl.style.fontSize = "12px";
+        correctionEl.style.marginTop = "5px";
+        correctionEl.style.color = "gray";
+        correctionEl.textContent = "✔ " + correction;
+        msg.appendChild(correctionEl);
+      }
+      chat.appendChild(msg);
+      chat.scrollTop = chat.scrollHeight;
+    }
+
+    function detectError(text) {
+    const lower = text.toLowerCase();
+
+      // PRIORITY: past tense context
+      if (lower.includes("yesterday") && lower.includes("go")) {
+        return "went";
+      }
+
+      // present simple
+      if  (lower.includes("he go")) {
+        return "He goes";
+      }
+      if (text.includes("he go")) {
+        return "He goes";
+      }
+      if (text.includes("yesterday") && text.includes("go")) {
+        return "went";
+      }
+      return null;
+    }
+
+    function fakeAIResponse(userText) {
+      return "Tell me more about that.";
+    }
+
+    function sendMessage() {
+      const input = document.getElementById("textInput");
+      const text = input.value;
+      if (!text) return;
+      const correction = detectError(text);
+      addMessage(text, "user", correction);
+      const reply = fakeAIResponse(text);
+      setTimeout(() => {
+        addMessage(reply, "ai");
+      }, 500);
+      input.value = "";
+    }
+  </script>
+
+</body>
+</html>
