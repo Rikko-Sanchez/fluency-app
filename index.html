@@ -55,6 +55,13 @@
 
   <h2>💬 Fluency Chat</h2>
 
+<label for="mode">Choose conversation mode:</label>
+<select id="mode">
+  <option value="friendly">😊 Friendly</option>
+  <option value="confused">🤔 Confused</option>
+  <option value="difficult">😤 Difficult</option>
+</select>
+
   <div id="chat"></div>
 
   <div id="inputArea">
@@ -103,8 +110,22 @@
     }
 
     function fakeAIResponse(userText) {
-      return "Tell me more about that.";
-    }
+  const mode = document.getElementById("mode").value;
+
+  if (mode === "friendly") {
+    return "That sounds great! Tell me more 😊";
+  }
+
+  if (mode === "confused") {
+    return "Hmm… I’m not sure I understand. Can you explain differently?";
+  }
+
+  if (mode === "difficult") {
+    return "Why would you say that?";
+  }
+
+  return "Tell me more.";
+}
 
     function sendMessage() {
       const input = document.getElementById("textInput");
